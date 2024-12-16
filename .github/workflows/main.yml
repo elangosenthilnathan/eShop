@@ -8,9 +8,9 @@ on:
 
 jobs:
   Qwiet-Static-Analysis:
-    runs-on: windows-latest
-    # container:
-    #   image: mcr.microsoft.com/dotnet/sdk:latest
+    runs-on: ubiuntu-latest
+    container:
+      image: mcr.microsoft.com/dotnet/sdk:latest
 
     steps:
     - uses: actions/checkout@v4
@@ -20,25 +20,25 @@ jobs:
       with:
         python-version: "3.10"    
 
-    # - name: Download ShiftLeft CLI
-    #   run: |
-    #     curl https://cdn.shiftleft.io/download/sl > ./sl && chmod a+rx ./sl 
-
-    # - name: Run sl analyze
-    #   shell: bash
-    #   run: |
-    #     ./sl analyze --wait --verbose --app ${GITHUB_REPOSITORY#*/} --tag branch=${{ github.head_ref || steps.extract_branch.outputs.branch }} . 
-    #   env:
-    #     SHIFTLEFT_ACCESS_TOKEN: ${{ secrets.SHIFTLEFT_ACCESS_TOKEN }}
-
     - name: Download ShiftLeft CLI
       run: |
-        Invoke-WebRequest -Uri 'https://cdn.shiftleft.io/download/sl-latest-windows-x64.zip' -OutFile sl.zip
-        Expand-Archive -Path sl.zip -DestinationPath .
+        curl https://cdn.shiftleft.io/download/sl > ./sl && chmod a+rx ./sl 
 
-    - name: Analyze with NextGen Static Analysis
+    - name: Run sl analyze
+      shell: bash
       run: |
-        .\sl analyze --wait --verbose --app ShiftLeftHSLGo1455-win  .
+        ./sl analyze --wait --verbose --app ${GITHUB_REPOSITORY#*/} . 
       env:
         SHIFTLEFT_ACCESS_TOKEN: ${{ secrets.SHIFTLEFT_ACCESS_TOKEN }}
+
+    # - name: Download ShiftLeft CLI
+    #   run: |
+    #     Invoke-WebRequest -Uri 'https://cdn.shiftleft.io/download/sl-latest-windows-x64.zip' -OutFile sl.zip
+    #     Expand-Archive -Path sl.zip -DestinationPath .
+
+    # - name: Analyze with NextGen Static Analysis
+    #   run: |
+    #     .\sl analyze --wait --verbose --app ShiftLeftHSLGo1455-win  .
+    #   env:
+    #     SHIFTLEFT_ACCESS_TOKEN: ${{ secrets.SHIFTLEFT_ACCESS_TOKEN }}
  
