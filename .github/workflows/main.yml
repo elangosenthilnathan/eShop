@@ -8,21 +8,32 @@ on:
 
 jobs:
   Qwiet-Static-Analysis:
-    runs-on: ubuntu-latest
-    container:
-      image: mcr.microsoft.com/dotnet/sdk:latest
+    runs-on: windows-latest
+    # container:
+    #   image: mcr.microsoft.com/dotnet/sdk:latest
 
     steps:
     - uses: actions/checkout@v4
 
+    # - name: Download ShiftLeft CLI
+    #   run: |
+    #     curl https://cdn.shiftleft.io/download/sl > ./sl && chmod a+rx ./sl 
+
+    # - name: Run sl analyze
+    #   shell: bash
+    #   run: |
+    #     ./sl analyze --verbose --app ${GITHUB_REPOSITORY#*/} --tag branch=${{ github.head_ref || steps.extract_branch.outputs.branch }} . 
+    #   env:
+    #     SHIFTLEFT_ACCESS_TOKEN: ${{ secrets.SHIFTLEFT_ACCESS_TOKEN }}
+
     - name: Download ShiftLeft CLI
       run: |
-        curl https://cdn.shiftleft.io/download/sl > ./sl && chmod a+rx ./sl 
+        Invoke-WebRequest -Uri 'https://cdn.shiftleft.io/download/sl-latest-windows-x64.zip' -OutFile sl.zip
+        Expand-Archive -Path sl.zip -DestinationPath .
 
-    - name: Run sl analyze
-      shell: bash
+    - name: Analyze with NextGen Static Analysis
       run: |
-        ./sl analyze --verbose --app ${GITHUB_REPOSITORY#*/} --tag branch=${{ github.head_ref || steps.extract_branch.outputs.branch }} . 
+        .\sl analyze --strict --app ${GITHUB_REPOSITORY#*/} --tag branch=${{ github.head_ref || steps.extract_branch.outputs.branch }} .
       env:
         SHIFTLEFT_ACCESS_TOKEN: ${{ secrets.SHIFTLEFT_ACCESS_TOKEN }}
-
+ 
