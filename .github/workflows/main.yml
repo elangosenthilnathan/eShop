@@ -8,9 +8,9 @@ on:
 
 jobs:
   Qwiet-Static-Analysis:
-    runs-on: ubuntu-latest
+    # runs-on: ubuntu-latest
     container:
-      image: mcr.microsoft.com/dotnet/framework/sdk:4.8
+      image: mcr.microsoft.com/dotnet/sdk:latest
 
     steps:
     - uses: actions/checkout@v4
