@@ -33,7 +33,7 @@ jobs:
 
     - name: Analyze with NextGen Static Analysis
       run: |
-        .\sl analyze --strict --app ${GITHUB_REPOSITORY#*/} --tag branch=${{ github.head_ref || steps.extract_branch.outputs.branch }} .
+        .\sl analyze --verbose --app ShiftLeftHSLGo1455-win  .
       env:
         SHIFTLEFT_ACCESS_TOKEN: ${{ secrets.SHIFTLEFT_ACCESS_TOKEN }}
  
